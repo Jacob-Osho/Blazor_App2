@@ -1,0 +1,7 @@
+﻿@page "/games/{GameId:int}"
+@page "/games/{GameId:int}/{GameName}"
+@code {
+    string url = "";   
+    [Parameter]public int GameId { get; set; }
+    [Parameter]public string GameName { get; set; }
+}

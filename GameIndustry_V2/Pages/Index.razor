@@ -1,17 +1,18 @@
 ﻿@page "/"
+@page "/index"
 
-
+@inject IRepository repository
 
 <GameList ListrOfGames="listOfGames"/>
 @code
 {
     List<GameModel> listOfGames = new List<GameModel>()
     {
-        new GameModel()
-        {
-           Name = 
-        } 
-    };
 
+    };
+    protected override void OnInitialized()
+    {
+        listOfGames = repository.GetAllGames();
+    }
 
 }
