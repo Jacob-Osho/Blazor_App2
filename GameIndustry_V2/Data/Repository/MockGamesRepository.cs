@@ -16,22 +16,26 @@ namespace GameIndustry_V2.Data.Repository
                 new GameModel()
                 {
                     Name = "Farming Simulator",
-                    Genre = "Simulator",
-                    ReleaseDate = new DateTime(2018, 11, 19)
+                    GenreId = 0,
+                    ReleaseDate = new DateTime(2018, 11, 19),
+                    Image="https://s1.gaming-cdn.com/images/products/8676/orig-fallback-v1/farming-simulator-22-pc-mac-game-steam-cover.jpg"
+
 
                 },
                 new GameModel()
                 {
                     Name = "The Witcher 3",
-                    Genre = "Action/RPG",
-                    ReleaseDate = new DateTime(2015, 05, 18)
+                    GenreId = 2,
+                    ReleaseDate = new DateTime(2015, 05, 18),
+                    Image="https://s1.gaming-cdn.com/images/products/972/orig-fallback-v1/the-witcher-3-wild-hunt-expansion-pass-pc-game-gogcom-cover.jpg"
 
                 },
                 new GameModel()
                 {
                     Name = "Destroy all Humans",
-                    Genre = "Actio-advanture",
-                    ReleaseDate = new DateTime(2020, 07, 28)
+                    GenreId = 1,
+                    ReleaseDate = new DateTime(2020, 07, 28),
+                    Image ="https://cdn1.epicgames.com/c12a5687fb024192999b2d22c555d4c6/offer/DAH_Portrait-1200x1600-2e2b6bca291228e4df252c4857664408.jpg"
 
                 }
             };
@@ -52,8 +56,13 @@ namespace GameIndustry_V2.Data.Repository
                     Name = "Action"
                 },
                  new Genre()
+                 {
+                     Id = 3,
+                     Name = "Platformer"
+                 },
+                 new Genre()
                   {
-                      Id = 3,
+                      Id = 4,
                       Name = "Horror"
                   }
             };

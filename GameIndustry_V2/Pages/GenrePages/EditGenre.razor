@@ -1,5 +1,5 @@
 ﻿@page "/genres/edit/{GenreId:int}"
-@inject IRepository Db
+@inject IRepository _db
 
 <div class="row">
     <div class="col">
@@ -46,11 +46,11 @@
     List<Genre> allGenreList = new();
     protected override void OnInitialized()
     {
-        genre = Db.GetGenreById(GenreId);
+        genre = _db.GetGenreById(GenreId);
     }
     void Edit()
     {
-        var result = Db.EditGenre(genre);
+        var result = _db.EditGenre(genre);
         if (result)
         {
             cssClass = "alert alert-success";
@@ -66,6 +66,6 @@
     void UpdateGenreList()
     {
         allGenreList = new();
-        allGenreList = Db.GetAllGenres();
+        allGenreList = _db.GetAllGenres();
     }
 }
