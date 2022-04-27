@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tewr.Blazor.FileReader;
 
 namespace GameIndustry_V2
 {
@@ -31,6 +32,7 @@ namespace GameIndustry_V2
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddTransient<IRepository,MockGamesRepository>();
+            services.AddFileReaderService(options => options.InitializeOnFirstCall = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

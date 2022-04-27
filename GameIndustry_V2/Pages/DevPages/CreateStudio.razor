@@ -1,0 +1,26 @@
+﻿@page "/studio/create"
+
+<div class="row">
+    <div class="col">
+        <h1 class="text-info">Create Developer Studio</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <DevPageForm Developer="Developer" OnValidSubmitHandler="Create"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+       
+    </div>
+</div>
+@code {
+    GameDeveloper Developer = new(); 
+
+    void Create()
+    {
+        //todo : create studio logic
+
+    }
+}
