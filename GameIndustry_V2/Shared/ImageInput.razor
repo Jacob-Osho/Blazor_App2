@@ -49,7 +49,7 @@
                 imageBase64 = Convert.ToBase64String(byteImg);
                 await OnImageFileSelected.InvokeAsync(imageBase64);
                 ImageUrl = null;
-                StateHasChanged();
+                StateHasChanged(); 
             }
         }
     }

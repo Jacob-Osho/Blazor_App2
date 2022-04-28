@@ -8,8 +8,11 @@
         </div>
     </div>
 
-    <!--ToDo: Image loading field-->
-    <ImageInput Label="Image" OnImageFileSelected="ImageFileSelectedHandler" ImageUrl="@imageUrl"/>
+    <!-- Image loading field-->
+    <ImageInput Label="Image" OnImageFileSelected="ImageFileSelectedHandler" ImageUrl="@imageUrl" />
+    <div class="form-group form-markdown">
+        <MarkDownInput @bind-Value="Developer.StudioDescription" Label="Description" OnFor=" (() =>Developer.StudioDescription)"/>
+    </div>
     <button type="submit" class="btn btn-outline-primary">Create New Studio</button>
 </EditForm>
 
