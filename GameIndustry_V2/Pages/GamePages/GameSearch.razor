@@ -77,10 +77,10 @@
         {
             Games = Games.Where(x => x.Name.ToLower().Contains(gameName.ToLower())).ToList();
         }
-        if (selectedGameGenre != "-1")
-        {
-            Games = Games.Where(x => x.GenreId.ToString().Equals(selectedGameGenre)).ToList();
-        } 
+        //if (selectedGameGenre != "-1")
+        //{
+        //    Games = Games.Where(x => x.GenreId.ToString().Equals(selectedGameGenre)).ToList();
+        //} 
         if(futureRelease)
         {
             Games = Games.Where(x => x.ReleaseDate > DateTime.Now).ToList();

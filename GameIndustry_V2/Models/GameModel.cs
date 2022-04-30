@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GameIndustry_V2.Models
@@ -18,7 +19,7 @@ namespace GameIndustry_V2.Models
         public string Descritoion { get; set; }
         public bool Insale { get; set; }
         public string GamePlayVideo { get; set; }
-        public int GenreId { get; set; }
+        public List<GamesGenres> GamesGenres { get; set; } = new();
         [Required]
         public DateTime? ReleaseDate { get; set; }
         public string Image { get; set; }
