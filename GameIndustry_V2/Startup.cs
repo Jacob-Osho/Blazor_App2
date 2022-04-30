@@ -31,7 +31,7 @@ namespace GameIndustry_V2
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddTransient<IRepository,MockGamesRepository>();
+            services.AddSingleton<IRepository,MockGamesRepository>();
             services.AddFileReaderService(options => options.InitializeOnFirstCall = true);
         }
 

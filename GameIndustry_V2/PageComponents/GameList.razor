@@ -19,11 +19,16 @@ else
     <div class="row">
         @foreach(var iteam in ListrOfGames)
         {
-            <IndividualGame Game="iteam"/>
+            <IndividualGame Game="iteam" OnDeleteGame="DeleteGame" />
         }
     </div>
 }
 
 @code {
     [Parameter] public List<GameModel> ListrOfGames { get; set; }
+
+    void DeleteGame(GameModel game)
+    {
+        ListrOfGames.Remove(game);
+    }
 }
