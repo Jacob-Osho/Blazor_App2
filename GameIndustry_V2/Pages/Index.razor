@@ -1,15 +1,36 @@
 ﻿@page "/"
 @page "/index"
-
 @inject IRepository _db
 
+    <Typeahead  OnSearchHandler="SearchHandler"  >
+    <ResultTemplate>
+        @context
+    </ResultTemplate>
+</Typeahead>
+
 <GameList ListrOfGames="listOfGames"/>
+
+
 @code
 {
     List<GameModel> listOfGames = new List<GameModel>();
     protected override void OnInitialized()
     {
         listOfGames = _db.GetAllGames();
+    }
+    async Task<IEnumerable<string>> SearchHandler(string searchText)
+    {
+        await Task.Delay(2000);
+        if(searchText.Equals("test"))
+        {
+            return Enumerable.Empty<string>();
+        }
+        return new List<string>
+        {
+            "Cd Project Red",
+            "Giants Software"
+
+        };
     }
 
 }
