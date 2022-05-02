@@ -1,4 +1,4 @@
-﻿
+﻿@inject IRepository _db
 <EditForm Model="Game" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
@@ -35,19 +35,32 @@
         <ImageInput Label="Image" OnImageFileSelected="ImageFileSelectedHandler" ImageUrl="@imageUrl" />
     </div>
     <div class="form-check">
-        <InputCheckbox @bind-Value="Game.Insale" class="form-check-input" id="gridCheck1"/>
+        <InputCheckbox @bind-Value="Game.Insale" class="form-check-input" id="gridCheck1" />
         <label class="form-check-label" for="gridCheck1">Early Sale</label>
     </div>
     <div class="form-group form-markdown">
         <MarkDownInput @bind-Value="Game.Descritoion" Label="Description"
-        OnFor=" (() =>Game.Descritoion)" />
+                       OnFor=" (() =>Game.Descritoion)" />
     </div>
 
     <div class="form-group">
+        <label>Developers:</label>
+        <MultipleSelectorTypeahead Context="GameDeveloper" OnSearch="SearchHandler" OnSelectedElements="SelectedDevelopers">
+            <ResultTemplate>
+                <img src="@GameDeveloper.Image" style="width:50px;" />
+                @GameDeveloper.Name
+            </ResultTemplate>
+            <ListTemplate>
+                @GameDeveloper.Name
+            </ListTemplate>
+        </MultipleSelectorTypeahead>
+    </div>
+    <div class="form-group">
         <label>Game Genres</label>
-        <MultipleSelector OnNotSelected="NotSelected" OnSelected="Selected"/>
+        <MultipleSelector OnNotSelected="NotSelected" OnSelected="Selected" />
     </div>
     <button class="btn btn-primary" type="submit">Save Changes</button>
+
 
 </EditForm>
 
@@ -60,7 +73,9 @@
     [Parameter] public List<Genre> NotSelectedGenres { get; set; } = new();
     [Parameter] public List<MultipleSelecterHelperModel> Selected { get; set; } = new();
     [Parameter] public List<MultipleSelecterHelperModel> NotSelected { get; set; } = new();
+    [Parameter] public List<GameDeveloper> SelectedDevelopers { get; set; } = new();
     string imageUrl;
+
     protected override void OnInitialized()
     {
         Selected = SelectedGenres.Select(x => new MultipleSelecterHelperModel(x.Id.ToString(), x.Name)).ToList();
@@ -78,7 +93,9 @@
     {
         Game.Image = ImageBase64;
         imageUrl = null;
-
-
+    }
+    async Task<IEnumerable<GameDeveloper>> SearchHandler(string searchText)
+    {
+        return _db.GetAllDevelopers();
     }
 }
