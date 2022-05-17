@@ -1,0 +1,101 @@
+﻿@page "/games/search"
+@inject IRepository _db
+
+<div class="row">
+    <div class="col">
+        <h1 class="text-info">Search Game</h1>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-sm-12 col-md-6">
+        <input type="text" class="form-control mb-2" placeholder="Enter game name" @bind-value="gameName"
+               @bind-value:event="oninput" @onkeypress="((KeyboardEventArgs args)=>GameNameKeyPressHandler(args) )" />
+
+        <select class="form-control mb-2" @bind="selectedGameGenre">
+            <option value="-1">--Select game genre--</option>
+            @foreach (var iteam in Genres)
+            {
+                <option value="@iteam.Id">@iteam.Name</option>
+            }
+        </select>
+        <div class="row mb-2">
+            <div class="col">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="futureReleaseId" @bind="futureRelease" />
+                    <label class="custom-control-label" for="futureReleaseId">Future Realease?</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="earlyBuyId" @bind="earlyBuy" />
+                    <label class="custom-control-label" for="earlyBuyId">Early Acces?</label>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary form-control mb-2" @onclick="SearhTheGame">Search </button>
+        <button type="button" class="btn btn-outline-danger form-control" @onclick="ResetValues">Reset </button>
+    </div>
+
+    <div class="col-sm-12 col-md-6">
+        <div class="border border-primary rounded p-4">
+            <p>Game Name : @gameName</p>
+            <p>Game Genre : @selectedGameGenre</p>
+            <p>Game Futer Release  : @futureRelease</p>
+            <p>Game Eearly Acces : @earlyBuy</p>
+        </div>
+    </div>
+</div>
+<div class="border border-success rounded p-3 my-3 mx-1">
+    <GameList ListrOfGames="Games" />
+</div>
+
+
+@code {
+    string gameName = string.Empty;
+    string selectedGameGenre = "-1";
+    bool futureRelease = false;
+    bool earlyBuy = false;
+    List<Genre> Genres = new();
+    List<GameModel> Games = new();
+    void GameNameKeyPressHandler(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            //todoo:Search
+
+        }
+    }
+    protected override void OnInitialized()
+    {
+        Genres = _db.GetAllGenres();
+    }
+    void SearhTheGame()
+    {
+        Games = _db.GetAllGames();
+        //todo: Filter
+        if (!string.IsNullOrWhiteSpace(gameName))
+        {
+            Games = Games.Where(x => x.Name.ToLower().Contains(gameName.ToLower())).ToList();
+        }
+        //if (selectedGameGenre != "-1")
+        //{
+        //    Games = Games.Where(x => x.GenreId.ToString().Equals(selectedGameGenre)).ToList();
+        //} 
+        if(futureRelease)
+        {
+            Games = Games.Where(x => x.ReleaseDate > DateTime.Now).ToList();
+        }
+        if(earlyBuy)
+        {
+            Games = Games.Where(x => x.ReleaseDate <= DateTime.Now).ToList();
+        }
+    }
+    void ResetValues()
+    {
+        gameName = string.Empty;
+        selectedGameGenre = "-1";
+        futureRelease = false;
+        earlyBuy = false;
+        Games = new();  
+    }
+}

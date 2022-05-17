@@ -1,0 +1,45 @@
+﻿@typeparam TValue
+
+
+<Typeahead OnSearchHandler="((string searchText)=>OnSearch(searchText))" OnValueChangedHandler="((TValue item)=>SelectedHandler(item))">
+        <ResultTemplate>
+            @ResultTemplate(context)
+        </ResultTemplate>
+</Typeahead>
+<ul class="list-group">
+    @foreach (var item in OnSelectedElements)
+    {
+        <li draggable="true" class="list-group-item list-group-item-action" @ondragstart="(()=>DragStartHandler(item))" @ondragover="(()=>DragOverHandler(item))">
+            @ListTemplate(item)
+            <span class="badge badge-primary badge-pill" style="cursor:pointer; vertical-align:middle;"@onclick="(()=>OnSelectedElements.Remove(item))">x</span>
+        </li>
+    }
+</ul>
+
+@code {
+     [Parameter] public List<TValue> OnSelectedElements { get; set; } = new();
+    [Parameter]public Func<string,Task<IEnumerable<TValue>>> OnSearch { get; set; }
+    [Parameter]public RenderFragment<TValue> ResultTemplate { get; set; }
+    [Parameter]public RenderFragment<TValue> ListTemplate { get; set; }
+
+    TValue draggedItem;
+    void SelectedHandler(TValue item)
+    {
+        if (!OnSelectedElements.Any(x => x.Equals(item)))
+            OnSelectedElements.Add(item);
+    }
+    void DragStartHandler(TValue iteam)
+    {
+        draggedItem = iteam;
+    }
+    void DragOverHandler(TValue item)
+    {
+        if(!item.Equals(draggedItem))
+        {
+            var dragElementIndex = OnSelectedElements.IndexOf(draggedItem);
+            var elementIndex = OnSelectedElements.IndexOf(item);
+            OnSelectedElements[elementIndex] = draggedItem;
+            OnSelectedElements[dragElementIndex] = item;
+        }
+    }
+}

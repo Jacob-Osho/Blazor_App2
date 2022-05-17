@@ -1,0 +1,51 @@
+﻿@using System.Text.RegularExpressions
+
+
+<div class="col-sm-12 col-md-4  text-center">
+    <div class="game-name">
+        <a href="@url">@Game.ShortName</a>
+    </div>
+    
+    <hr class="hrfix" />
+
+    <div class="card-image">
+        <a href="@url">
+            @if(IsBase64(Game.Image))
+            {
+              <img src="data:image/jpeg;base64,@Game.Image" class="game-image"/>
+            }
+            else
+            {
+                <img src="@Game.Image" alt="@Game.Name" class="game-image" />
+            }
+            
+        </a>
+    </div>
+    <hr class="hrfix" />
+
+    <div class="game-cart-footer mb-4">
+        <div class="btn-group my-3 text-center" role="group">
+            <a href="#" class="btn btn-outline-info"> <i class="fas fa-edit"></i> </a>
+            <button type="button" class="btn btn-outline-danger" @onclick="(()=>OnDeleteGame.InvokeAsync(Game))">
+                <i class="fas fa-trash-alt "></i>
+            </button>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter] public GameModel Game { get; set; }
+    [Parameter] public EventCallback<GameModel> OnDeleteGame { get; set; }
+    string url = string.Empty;
+    protected override void OnInitialized()
+    {
+
+        url = $"/games/{Game.Id}/{Game.Name.Replace(" ", "-")}";
+    }
+    bool IsBase64(string value)
+    {
+        value = value.Trim();
+
+        return ((value.Length % 4 == 0) && Regex.IsMatch(value, @"^[a-zA-Z0-9\+/]*={0,3}$",RegexOptions.None));
+    }
+
+}

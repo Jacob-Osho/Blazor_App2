@@ -1,0 +1,101 @@
+﻿@inject IRepository _db
+<EditForm Model="Game" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label>Name</label>
+        <div>
+            <InputText class="form-control" @bind-Value="Game.Name" />
+            <ValidationMessage For="@(()=> Game.Name)">
+
+            </ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Gameplay Video</label>
+        <div>
+            <InputText class="form-control" @bind-Value="Game.GamePlayVideo" />
+            <ValidationMessage For="@(()=> Game.GamePlayVideo)">
+
+            </ValidationMessage>
+        </div>
+
+    </div>
+    <div class="form-group">
+        <label>Release Date </label>
+        <div>
+            <InputDate class="form-control" @bind-Value="Game.ReleaseDate" />
+            <ValidationMessage For="@(()=> Game.ReleaseDate)">
+
+            </ValidationMessage>
+        </div>
+    </div>
+    <div class="form-group">
+        <ImageInput Label="Image" OnImageFileSelected="ImageFileSelectedHandler" ImageUrl="@imageUrl" />
+    </div>
+    <div class="form-check">
+        <InputCheckbox @bind-Value="Game.Insale" class="form-check-input" id="gridCheck1" />
+        <label class="form-check-label" for="gridCheck1">Early Sale</label>
+    </div>
+    <div class="form-group form-markdown">
+        <MarkDownInput @bind-Value="Game.Descritoion" Label="Description"
+                       OnFor=" (() =>Game.Descritoion)" />
+    </div>
+
+    <div class="form-group">
+        <label>Developers:</label>
+        <MultipleSelectorTypeahead Context="GameDeveloper" OnSearch="SearchHandler" OnSelectedElements="SelectedDevelopers">
+            <ResultTemplate>
+                <img src="@GameDeveloper.Image" style="width:50px;" />
+                @GameDeveloper.Name
+            </ResultTemplate>
+            <ListTemplate>
+                @GameDeveloper.Name
+            </ListTemplate>
+        </MultipleSelectorTypeahead>
+    </div>
+    <div class="form-group">
+        <label>Game Genres</label>
+        <MultipleSelector OnNotSelected="NotSelected" OnSelected="Selected" />
+    </div>
+    <button class="btn btn-primary" type="submit">Save Changes</button>
+
+
+</EditForm>
+
+
+@code {
+    [Parameter] public GameModel Game { get; set; }
+
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public List<Genre> SelectedGenres { get; set; } = new();
+    [Parameter] public List<Genre> NotSelectedGenres { get; set; } = new();
+    [Parameter] public List<MultipleSelecterHelperModel> Selected { get; set; } = new();
+    [Parameter] public List<MultipleSelecterHelperModel> NotSelected { get; set; } = new();
+    [Parameter] public List<GameDeveloper> SelectedDevelopers { get; set; } = new();
+    string imageUrl;
+
+    protected override void OnInitialized()
+    {
+        Selected = SelectedGenres.Select(x => new MultipleSelecterHelperModel(x.Id.ToString(), x.Name)).ToList();
+        NotSelected = NotSelectedGenres.Select(x => new MultipleSelecterHelperModel(x.Id.ToString(), x.Name)).ToList();
+        if (Game.ReleaseDate is null)
+            Game.ReleaseDate = DateTime.Now;
+        if (!string.IsNullOrWhiteSpace(Game.Image))
+        {
+            imageUrl = Game.Image;
+            Game.Image = null;
+        }
+
+    }
+    void ImageFileSelectedHandler(string ImageBase64)
+    {
+        Game.Image = ImageBase64;
+        imageUrl = null;
+    }
+    async Task<IEnumerable<GameDeveloper>> SearchHandler(string searchText)
+    {
+        return _db.GetAllDevelopers();
+    }
+}

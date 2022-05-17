@@ -1,0 +1,71 @@
+﻿@page "/genres/edit/{GenreId:int}"
+@inject IRepository _db
+
+<div class="row">
+    <div class="col">
+        <h1 class="text-info">Edit Genre</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6">
+        @if (genre is not null)
+        {
+            <FormForGenre Genre="genre" OnValidSubmit="Edit" />
+        }
+        else
+        {
+            <div class= "alert alert-info"> Invalid Id </div>
+        }
+    </div>
+    <div class="col-6">
+        @if (msgResult is not null)
+        {
+            @foreach (var item in allGenreList)
+            {
+                <div class="row justify-content-lg-between m-1 text-white">
+                    <div class="col-6 bg-primary">
+                        ID : @item.Id
+                    </div>
+                    <div class="col-6 bg-info">
+                        Name : @item.Name
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public int GenreId { get; set; }
+
+    Genre genre;
+    string msgResult = string.Empty;
+    string cssClass = string.Empty;
+    List<Genre> allGenreList = new();
+    protected override void OnInitialized()
+    {
+        genre = _db.GetGenreById(GenreId);
+    }
+    void Edit()
+    {
+        var result = _db.EditGenre(genre);
+        if (result)
+        {
+            cssClass = "alert alert-success";
+            msgResult = "editing succes";
+            UpdateGenreList();
+        }
+        else
+        {
+            cssClass = "alert alert-danger";
+            msgResult = "editing failed";
+        }
+    }
+    void UpdateGenreList()
+    {
+        allGenreList = new();
+        allGenreList = _db.GetAllGenres();
+    }
+}
